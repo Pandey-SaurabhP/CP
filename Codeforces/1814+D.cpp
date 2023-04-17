@@ -17,39 +17,29 @@ void fast(){
     cout.tie(0);
 }
 
-
 int main(){
 
     // fast();
 
-    int n, m;
-    cin >> n >> m;
+    int t;
+    cin >> t;
 
-    vector <int> a(n);
+    while(t--){
+        int a, b;
+        cin >> a >> b;
 
-    for(int i = 0; i < n - 1; ++i){
-        int u, v;
-        cin >> u >> v;
+        int ans = INT_MAX;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
+        for(int k = 1; k <= min(100000, max(a, b)); ++k){
+            int localAns = (a + k - 1) / k;
+            localAns += (b + k - 1) / k;
+            localAns += (k - 1);
 
-    while(q--){
-        int type, x;
-        cin >> type >> x;
-
-        if(type == 1){
-            // Query
-
+            ans = min(ans, localAns);
         }
-        else{
-            // Upward shift
-            
-        }
+
+        cout << ans << "\n";
     }
-
-
     
     return 0;
 }
