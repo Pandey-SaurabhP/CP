@@ -24,12 +24,57 @@ int main(){
     string s, t;
     cin >> s >> t;
 
-    vector <vector <int>> a(s.size() + 1, vector <int> (t.size() + 1));
-
     int n = s.size();
     int m = t.size();
-    
-    for(int i = 0; i < )
+
+    vector <vector <int>> dp(n + 1, vector <int> (m + 1));
+
+    for(int i = 0; i <= n; ++i){
+        for(int j = 0; j <= m; ++j){
+
+            if(i == 0 || j == 0){
+                dp[i][j] = 0;                
+            }
+            else{
+                dp[i][j] = max(dp[i - 1][j - 1] + (s[i - 1] == t[j - 1]), 
+                            max(dp[i - 1][j], dp[i][j - 1]));
+            }
+        }
+    }
+
+    // for(int i = 0; i <= n; ++i){
+    //     for(int j = 0; j <= m; ++j){
+    //         cout << dp[i][j] << " ";
+    //     }
+
+    //     cout << "\n";
+    // }
+
+    string ans;
+
+    int j = m;
+    int i = n;
+
+    while(i > 0 && j > 0){
+        if(j - 1 >= 0 && dp[i][j - 1] == dp[i][j]){
+            --j;
+            continue;
+        }
+
+        if(i - 1 >= 0 && dp[i - 1][j] == dp[i][j]){
+            --i;
+            continue;
+        }
+        
+        if(i - 1 >= 0 && j - 1 >= 0 && dp[i - 1][j - 1] != dp[i][j]){
+            ans += t[j - 1];
+            --i;
+            --j;
+        }
+    }
+
+    reverse(ans.begin(), ans.end());
+    cout << ans;
     
     return 0;
 }
