@@ -17,245 +17,63 @@ void fast(){
     cout.tie(0);
 }
 
-class segmentTree{
-public:
- 
-    vector <ll> segTree;
- 
-    segmentTree(){
-        segTree.resize(1000005);
-
-        for(ll i = 0; i < segTree.size(); ++i){
-            segTree[i] = 0;
-        }
+void printPQ(priority_queue <int> pq){
+    while(!pq.empty()){
+        cout << pq.top() << " ";
+        pq.pop();
     }
- 
-    segmentTree(ll n){
-        segTree.resize(4 * n);
-
-        for(ll i = 0; i < 4 * n; ++i){
-            segTree[i] = 0;
-        }
-    }
- 
-    void build(ll l, ll r, ll i, vector <ll> &a){
- 
-        if(l == r){
-            segTree[i] = a[l];
-            return;
-        }
- 
-        ll mid = (l + r) / 2;
- 
-        build(l, mid, 2 * i + 1, a);
-        build(mid + 1, r, 2 * i + 2, a);
- 
-        segTree[i] = segTree[2 * i + 1] + segTree[2 * i + 2];
-    }
- 
-    void pointUpdate(ll l, ll r, ll i, ll uidx, ll uval){
- 
-        if(l == r){
-            segTree[i] = uval;
-            return;
-        } 
- 
-        ll mid = (l + r) / 2;
- 
-        if(mid >= uidx){
-            pointUpdate(l, mid, 2 * i + 1, uidx, uval);
-        }
-        else{
-            pointUpdate(mid + 1, r, 2 * i + 2, uidx, uval);
-        }
- 
-        segTree[i] = segTree[2 * i + 1] + segTree[2 * i + 2];
-    }
- 
-    ll rangeQuery(ll l, ll r, ll i, ll ul, ll ur){
- 
-        if(l >= ul && r <= ur){
-            return segTree[i];
-        }
- 
-        if(r < ul || l > ur){
-            return 0;
-        }
- 
-        ll mid = (l + r) / 2;
- 
-        ll a1 = rangeQuery(l, mid, 2 * i + 1, ul, ur);
-        ll a2 = rangeQuery(mid + 1, r, 2 * i + 2, ul, ur);
- 
-        return a1 + a2;
-    }
-};
- 
+    cout << "\n";
+}
 int main(){
 
-    fast();
+    // fast();
 
-    ll n, m, q;
+    int n, m, q;
     cin >> n >> m >> q;
 
     string s;
     cin >> s;
 
-    vector <ll> l(m), r(m);
-    vector <vector <ll>> foHelp(n + 1);
-    vector <ll> fo(n + 1, INT_MAX);
+    vector <int> st(n, INT_MAX);
+    vector <int> ed(n, INT_MAX);
 
-    for(ll i = 0; i < m; ++i){
+    int i = 1;
 
-        cin >> l[i] >> r[i];
-        --l[i], --r[i];
+    while(m--){
+        int l, r;
+        cin >> l >> r;
+        --l; --r;
 
-        if(l == r){
-            fo[l[i]] = i;
-        }
-        else{
-            foHelp[l[i]].push_back(i);
-            foHelp[r[i]].push_back(i);
-        }
+        st[l] = min(i, st[l]);
+        ed[r] = min(i, ed[r]);
+
+        ++i;
     }
 
-    set <ll> st;
-    priority_queue <ll, vector <ll>, greater <ll>> pq;
-    set <ll> blocked;
+    priority_queue <int> pq;
+    vector <int> id(n, -1);
 
-    for(ll i = 0; i < n; ++i){
+    for(int i = 0; i < n; ++i){
+        printPQ(pq);
+
+        if(st[i] != INT_MAX){
+            pq.push(st[i]);
+        }
+
+        if(!pq.empty()) id[i] = pq.top();
         
-        for(auto j : foHelp[i]){
-            if(st.count(j)){
-                blocked.insert(j);
-            }
-            else{
-                pq.push(j);
-                st.insert(j);
-            }
-        }
-
-        if(!pq.empty()){
-            fo[i] = min(pq.top(), fo[i]);
-        }
-
-        if(!pq.empty() && blocked.count(pq.top())){
-            pq.pop();
+        if(!pq.empty() && ed[i] == pq.top()){
+            pq.push(ed[i]);
         }
     }
 
-    map <ll, vector <ll>> mp;
-
-    for(ll i = 0; i < n; ++i){
-        if(fo[i] != INT_MAX){
-            mp[fo[i]].push_back(i);
-        }
-    }
-
-    vector <ll> priority;
-    st.clear();
-
-    for(ll i = 0; i < m; ++i){
-
-        for(auto it : mp[i]){
-            if(!st.count(it)){
-                priority.push_back(it);
-                st.insert(it);
-            }
-        }
-    }
-
-    set <ll> unimp;
-
-    for(ll i = 0; i < n; ++i){
-        if(!st.count(i)){
-            unimp.insert(i);
-        }
-    }
-
-    ll oneCnt = 0;
-    for(auto it : priority){
-        if(s[it] == '1'){
-            oneCnt++;
-        }
-    }
-
-    ll oneCnt2 = 0;
-    for(auto it : unimp){
-        if(s[it] == '1'){
-            ++oneCnt2;
-        }
-    }
-
-    map <ll, ll> ui;
-
-    for(ll i = 0; i < priority.size(); ++i){
-        ui[priority[i]] = i;
-    }
-
-    segmentTree sg;
-
-    for(ll i = 0; i < priority.size(); ++i){
-        if(s[priority[i]] == '1'){
-            sg.pointUpdate(0, priority.size() - 1, 0, i, 1);
-        }
-    }
+    
+    print(id, n);
 
     while(q--){
-        ll x;
+        int x;
         cin >> x;
-
-        --x;
-
-        if(unimp.count(x)){
-            if(s[x] == '0'){
-                ++oneCnt2;
-                s[x] = '1';
-            }
-            else{
-                --oneCnt2;
-                s[x] = '0';
-            }
-
-        }
-        else{
-            if(s[x] == '0'){
-                ++oneCnt;
-                sg.pointUpdate(0, priority.size() - 1, 0, ui[x], 1);
-
-                s[x] = '1';
-            }
-            else{
-                --oneCnt;
-                sg.pointUpdate(0, priority.size() - 1, 0, ui[x], 0);
-
-                s[x] = '0';
-            }
-        }
-
-        ll cntOne = oneCnt + oneCnt2;
-
-        if(cntOne >= priority.size()){
-            if(oneCnt == priority.size()){
-                cout << 0 << "\n";
-            }
-            else{
-                cout << priority.size() - oneCnt << "\n";
-            }
-        }
-        else{
-            ll cnt = sg.rangeQuery(0, priority.size() - 1, 0, 0, cntOne - 1);
-            ll zc = cntOne - cnt;
-
-            ll availableOnes = oneCnt - cnt;
-            availableOnes += oneCnt2;
-
-            ll ans = max(min(zc, availableOnes), 0);
-
-            cout << ans << "\n";
-        }
     }
-    
     
     return 0;
 }
