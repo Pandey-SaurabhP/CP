@@ -19,9 +19,8 @@ typedef long double ld;
 typedef pair <ll, ll> pii;
 
 // Constants
-const ll mxn = 3e3 + 5;
+const ll mxn = 1e5 + 5;
 const ll mod = 1e9 + 7;
-const ll inf = 1e18;
 
 // Fast IO
 void fast(){
@@ -31,19 +30,19 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-vector <pair <int, pii>> edge;
-vector <int> comps;
+vector <vector <int>> adj(mxn);
 vector <bool> vis(mxn, 0);
-vector <int> dist(mxn, inf);
+vector <int> in(mxn, 0);
 
 void dfs(int root){
 
 	vis[root] = 1;
 
 	for(auto it : adj[root]){
-		if(!vis[it.ff]){
-			dfs(it.ff);
+		in[it]++;
+
+		if(!vis[it]){
+			dfs(it);
 		}
 	}
 }
@@ -52,78 +51,74 @@ void solve() {
     int n, m;
     cin >> n >> m;
 
-
-
     for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
+    	int u, v;
+    	cin >> u >> v;
 
-    	--u;
-    	--v;
+    	--u, --v;
 
-    	adj[u].pb({v, w});
-    	edge.pb({w, {u, v}});
+    	adj[u].pb(v);
     }
+
 
     for(int i = 0; i < n; ++i){
     	if(!vis[i]){
-    		comps.pb(i);
     		dfs(i);
     	}
     }
 
-    for(auto it : comps){
-    	dist[it] = 0;
-    }
-
-    vector <int> parent(mxn);
-    for(int i = 0; i < mxn; ++i){
-    	parent[i] = i;
-    }
+    map <int, int> mp;
 
     for(int i = 0; i < n; ++i){
-    	for(int j = 0; j < m; ++j){
+    	mp[i] = in[i];
+    }
 
-    		int u = edge[j].ss.ff;
-    		int v = edge[j].ss.ss;
-    		int w = edge[j].ff;
+    queue <int> q;
 
-    		if(dist[u] != INT_MAX){
-				dist[v] = min(dist[u] + w, dist[v]);	
+    for(int i = 0; i < n; ++i){
+    	if(in[i] == 0){
+    		q.push(i);
+    	}
+    }
+
+    vector <int> ans;
+
+    while(!q.empty()){
+    	int tp = q.front();
+    	q.pop();
+
+    	ans.pb(tp + 1);
+
+    	for(auto it : adj[tp]){
+    		in[it]--;
+
+    		if(in[it] == 0){
+    			q.push(it);
     		}
     	}
     }
 
-    vector <int> dist2 = dist;
-
-    bool changed = 0;
-
-    for(int i = 0; i < n; ++i){
-    	for(int j = 0; j < m; ++j){
-
-    		int u = edge[j].ss.ff;
-    		int v = edge[j].ss.ss;
-    		int w = edge[j].ff;
-
-    		if(dist2[u] != INT_MAX){
-    			changed = 1;
-				dist2[v] = min(dist2[u] + w, dist2[v]);	
-    		}
+    bool ok = 1;
+    for(auto it : in){
+    	if(it != 0){
+    		ok = 0;
+    		break;
     	}
     }
 
+    if(!ok){
+    	cout << "IMPOSSIBLE";
+    	return;
+    }
+
+    print(ans, i, ans.size());
 }
 
 int main(){
     
     fast();
 
-    ll t;
-    cin >> t;
-
-    while(t--){
-        solve();
-    }
+    solve();
 
     return 0;
 }

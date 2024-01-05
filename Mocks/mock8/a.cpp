@@ -30,33 +30,68 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
+    ll n, m, k;
     cin >> n >> m >> k;
 
+    vector <ll> a(n);
+    read(a, i, n);
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
-
-    	adj[u].pb({v, w});
+    map <ll, ll> mp;
+    for(ll i = 0; i < n; ++i){
+    	mp[a[i]] = i;
     }
 
+    sort(a.begin(), a.end());
+
+    set <int> st;
+
+    for(auto it : a){
+    	st.insert(it);
+    }
+
+    vector <ll> color(n, -1);
     
+    ll c = 1;
+    ll r = 0;
+
+    while(r < n){
+    	if(color[mp[a[r]]] != -1){
+    		++r;
+    		continue;
+    	}
+
+    	ll x = a[r];
+
+    	while(1){
+
+    		color[mp[x]] = c;
+    		st.erase(x);
+
+    		int tmp = x;
+    		auto it = st.upper_bound(x + k);
+
+
+    		if(it == st.end()) break;
+    		x = *it;
+
+    	}
+
+
+    	++c;
+    	++r;
+    }
+
+    cout << c - 1 << "\n";
+    print(color, i, n);
 }
 
 int main(){
     
     fast();
 
-    ll t;
-    cin >> t;
-
-    while(t--){
-        solve();
-    }
+    solve();
+    
 
     return 0;
 }

@@ -19,7 +19,7 @@ typedef long double ld;
 typedef pair <ll, ll> pii;
 
 // Constants
-const ll mxn = 1e6 + 5;
+const ll mxn = 3e5 + 5;
 const ll mod = 1e9 + 7;
 
 // Fast IO
@@ -30,21 +30,61 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
+vector <vector <int>> adj(mxn);
+set <int> st;
+
+int dfs(int root, string &s){
+
+	if(st.count(root)){
+		return 0;
+	}
+
+	int ans = INT_MAX;
+
+	int i = 0;
+
+	for(auto it : adj[root]){
+		if(it == -1){
+			++i;
+			continue;
+		}
+		else{
+			ans = min(ans, (i == 0? (s[root] != 'L'): (s[root] != 'R')) + dfs(it, s));
+			++i;
+		}
+	}
+
+	return ans;
+}
 
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+    int n;
+    cin >> n;
 
+    for(int i = 0; i <= n; ++i){
+    	adj[i].clear();
+    }
+    st.clear();
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
+    string s;
+    cin >> s;
 
-    	adj[u].pb({v, w});
+    for(int i = 0; i < n; ++i){
+    	int l, r;
+    	cin >> l >> r;
+
+    	--l; --r;
+
+		adj[i].pb(l);
+		adj[i].pb(r);
+    	
+
+    	if(l == -1 && r == -1){
+    		st.insert(i);
+    	}
     }
 
-    
+    cout << dfs(0, s) << "\n";
 }
 
 int main(){

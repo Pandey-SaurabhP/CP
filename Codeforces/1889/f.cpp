@@ -30,26 +30,35 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+	int n, q;
+	cin >> n >> q;
 
+	for(int i = 0; i < n - 1; ++i)   {
+		cout << i + 1 << " " << i + 2 << "\n";
+	}
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
+	int curPar = n - 1;
 
-    	adj[u].pb({v, w});
-    }
+	for(int i = 0; i < q; ++i){
+		int d;
+		cin >> d;
 
-    
+		// Pick the nth vertex put it on side of n - dth vertex
+
+		if(n - d == curPar){
+			cout << "-1 -1 -1\n";
+		}
+		else{
+			cout << n << " " << curPar << " " << n - d << "\n";
+			curPar = n - d;
+		}
+	}
 }
 
 int main(){
     
-    fast();
+    // fast();
 
     ll t;
     cin >> t;

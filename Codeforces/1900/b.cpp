@@ -30,21 +30,49 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+    int a, b, c;
+    cin >> a >> b >> c;
 
+    bool oka, okb, okc;
+    oka = okb = okc = 0;
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
+    int ta, tb, tc, x;
 
-    	adj[u].pb({v, w});
+    ta = a, tb = b, tc = c;
+    x = min(b, c);
+
+    a += x;
+    b -= x;
+    c -= x;
+
+    if(max(b, c) % 2 == 0){
+    	oka = 1;
     }
 
-    
+    a = ta, b = tb, c = tc;
+    x = min(a, c);
+
+    a -= x;
+    b += x;
+    c -= x;
+
+    if(max(a, c) % 2 == 0){
+    	okb = 1;
+    }
+
+    a = ta, b = tb, c = tc;
+    x = min(a, b);
+
+    a -= x;
+    b -= x;
+    c += x;
+
+    if(max(a, b) % 2 == 0){
+    	okc = 1;
+    }
+
+    cout << oka << " " << okb << " " << okc << "\n";
 }
 
 int main(){

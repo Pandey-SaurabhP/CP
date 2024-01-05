@@ -19,7 +19,7 @@ typedef long double ld;
 typedef pair <ll, ll> pii;
 
 // Constants
-const ll mxn = 1e6 + 5;
+const ll m xn = 1e6 + 5;
 const ll mod = 1e9 + 7;
 
 // Fast IO
@@ -30,20 +30,7 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
-
-
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
-
-    	adj[u].pb({v, w});
-    }
-
     
 }
 

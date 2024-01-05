@@ -30,33 +30,48 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+    ll n, m;
+    cin >> n >> m;
+
+    ll x1, y1, x2, y2;
+    cin >> x1 >> y1 >> x2 >> y2;
 
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
+    ll oneTile = 0;
 
-    	adj[u].pb({v, w});
-    }
+    // No cover area
+    if(m % 2 == 1){
+    	oneTile += ((x1 - 1) + (n - x2));
+	}
 
-    
+
+	// Cover Area
+
+	// Left Side
+	ll cntRows = x2 - x1 + 1;
+
+	if(y1 % 2 == 0){
+		oneTile += cntRows;
+	}
+
+
+	// Right Side
+	if((m - y2) % 2 == 1){
+		oneTile += cntRows;
+	}
+
+
+	cout << (oneTile + 1) / 2 << "\n";
+
+
 }
 
 int main(){
     
     fast();
 
-    ll t;
-    cin >> t;
-
-    while(t--){
-        solve();
-    }
+    solve();
 
     return 0;
 }

@@ -9,9 +9,9 @@ using namespace std;
 #define all(v)      v.begin(), v.end()
 #define rall(v)     v.rbegin(), v.rend()
 
-// Read and Print
+// Read and Prll
 #define read(a, i, n) for(ll i = 0; i < n; ++i) cin >> a[i];
-#define print(a, i, n) for(ll i = 0; i < n; ++i){ cout << a[i] << " ";} cout << "\n";
+#define prll(a, i, n) for(ll i = 0; i < n; ++i){ cout << a[i] << " ";} cout << "\n";
 
 // Typedefs
 typedef long long ll;
@@ -30,21 +30,28 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+    ll n;
+    cin >> n;
 
+    vector <pii> a(n);
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
-
-    	adj[u].pb({v, w});
+    for(ll i = 0; i < n; ++i){
+    	cin >> a[i].ff >> a[i].ss;
     }
 
-    
+    sort(a.begin(), a.end());
+
+    ll ans = 0;
+
+    vector<int> temp;
+    for (int i = n - 1; i >= 0; i--) {
+        int c = lower_bound(temp.begin(), temp.end(), a[i].ss) - temp.begin();
+        ans += c;
+        temp.insert(temp.begin() + c, a[i].ss);
+    }
+        
+    cout << ans << "\n";
 }
 
 int main(){

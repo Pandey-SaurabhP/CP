@@ -30,21 +30,11 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+    int n;
+    cin >> n;
 
-
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
-
-    	adj[u].pb({v, w});
-    }
-
-    
+    cout << ((n - 1) / 2) + 2 << "\n";
 }
 
 int main(){

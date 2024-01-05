@@ -30,21 +30,43 @@ void fast(){
 
 // Solve
 
-vector <vector <pii>> adj(mxn);
-
 void solve() {
-    int n, m, k;
-    cin >> n >> m >> k;
+    int n;
+    cin >> n;
 
+    string s;
+    cin >> s;
 
-    for(int i = 0; i < m; ++i){
-    	int u, v, w;
-    	cin >> u >> v >> w;
+    vector <int> cnt;
 
-    	adj[u].pb({v, w});
+    int xyz = 0;
+
+    for(int i = 0; i < n; ++i){
+    	if(s[i] == '.'){
+    		int j = i;
+    		while(j < n && s[j] == '.'){
+    			++j;
+    		}
+
+    		cnt.pb(j - i);
+
+    		i = j - 1;
+    	}
     }
 
-    
+    int tot = 0;
+
+    for(auto it : cnt){
+    	if(it >= 3){
+    		tot = 2;
+    		break;
+    	}
+    	else{
+    		tot += it;
+    	}
+    }
+
+    cout << tot << "\n";
 }
 
 int main(){
