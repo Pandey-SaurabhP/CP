@@ -1,0 +1,19 @@
+.pending-issues-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.pending-issue-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.pending-issue-item p {
+}
+
+.pending-issue-item p strong {
+    font-weight: bold;
+}

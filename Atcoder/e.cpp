@@ -1,103 +1,79 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-#define read(a, n) for(ll i = 0; i < n; ++i) cin >> a[i];
-#define print(a, n) for(ll i = 0; i < n; ++i) if(i == n - 1){ cout << a[i] << endl; } else { cout << a[i] << ' '; }
+// Macros
+#define pb          push_back
+#define pf          push_front
+#define ff          first
+#define ss          second
+#define all(v)      v.begin(), v.end()
+#define rall(v)     v.rbegin(), v.rend()
 
-typedef long long int ll;
+// Read and Print
+#define read(a, i, n) for(ll i = 0; i < n; ++i) cin >> a[i];
+#define print(a, i, n) for(ll i = 0; i < n; ++i){ cout << a[i] << " ";} cout << "\n";
+
+// Typedefs
+typedef long long ll;
 typedef long double ld;
+typedef pair <ll, ll> pii;
 
-const ll mod = 1e9 + 7;
+// Constants
 const ll mxn = 1e6 + 5;
+const ll mod = 1e9 + 7;
 
+// Fast IO
 void fast(){
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
 }
 
-bool check(vector <ll> &a, ll n, ll c, ll d, ll mid){
+// Solve
 
-    ll curSum = 0;
-    ll i = 0;
-    ll daysGone = 0;
-    ll gap = 0;
+void solve() {
+    int n;
+    cin >> n;
 
-    while(1){ 
-        
-        if(i < n) curSum += a[i];
-        ++daysGone;
+    vector <int> s(n + 1);
 
-        if(daysGone >= d){
-            break;
-        }
-
-        if(gap == mid){
-            i = 0;
-            gap = 0;
-            continue;
-        }
-
-        ++gap;
-        ++i;
+    for(int k = 0; k <= n; ++k){
+    	if(k < 1){
+    		s[k] = 0;
+    	}
+    	else{
+    		if(k % 10 == 0){
+    			s[k] = s[k / 10];
+    		}
+    		else{
+    			s[k] = s[k - 1] + 1;
+    		}
+    	}
     }
 
-    if(curSum >= c) return 1;
-    return 0;
+    print(s, i, n + 1);
+
+    int ans = 0;
+    int j = n;
+    // for(int j = 1; j <= n; ++j){
+    // 	ans = 0;
+	    for(int k = 1; k <= j; ++k){
+	    	if(k % s[k] == 0){
+	    		cout << k << " " << s[k] << "\n";
+	    		++ans;
+	    	}
+	    }
+
+	    cout << j << " : " << ans << "\n";
+	// }
+
+    cout << ans << "\n";
 }
 
 int main(){
-
-    fast();
-
-    ll t;
-    cin >> t;
-
-    while(t--){
-        ll n, c, d;
-        cin >> n >> c >> d;
-
-        vector <ll> a(n);
-
-        read(a, n);
-        sort(a.begin(), a.end());
-        reverse(a.begin(), a.end());
-
-        ll sm = 0ll;
-        for(int i = 0; i < min(d, n); ++i){
-            sm += a[i];
-        }
-
-        if(a[0] * d < c){
-            cout << "Impossible\n";
-        }
-        else if(sm >= c){
-            cout << "Infinity\n";
-        }
-        else{
-
-            ll ans = 0;
-
-            ll l = 0;
-            ll h = 1000000000000000000;
-
-            while(l < h){
-                ll mid = (l + h) / 2;
-
-                if(check(a, n, c, d, mid)){
-                    ans = mid;
-                    l = mid + 1;
-                }
-                else{
-                    h = mid;
-                }
-            }
-
-            cout << ans << "\n";
-        }
-
-    }
     
+    fast();
+        solve();
+    
+
     return 0;
 }
